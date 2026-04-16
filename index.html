@@ -58,6 +58,40 @@ body {
   100% { transform: scale(1); }
 }
 
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  z-index: 999;
+}
+
+.popup-content {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  width: 80%;
+  max-width: 320px;
+  text-align: center;
+}
+
+.popup-content h3 {
+  margin-bottom: 10px;
+}
+
+.popup-content button {
+  margin-top: 15px;
+  padding: 10px;
+  width: 100%;
+}
+
 button {
   margin-top: 12px;
   padding: 10px 16px;
@@ -73,6 +107,21 @@ button {
 
 <h2>솔로빙고</h2>
 <div id="board"></div>
+<!-- 📜 규칙 팝업 -->
+<div id="rulePopup" class="popup">
+  <div class="popup-content">
+    <h3>솔로빙고 게임 규칙</h3>
+    <p>
+      • 같은 숫자 두 칸을 클릭해서 색칠<br>
+      • 모든 칸을 색칠하면 클리어<br><br>
+      ★ 다음 경우에만 색칠할 수 있습니다:<br>
+      서로 붙어있는 같은 숫자 한 쌍<br>
+      테두리에 붙어있는 같은 숫자 한 쌍<br>
+      이미 색칠된 칸에 붙어있는 같은 숫자 한 쌍<br>
+    </p>
+    <button onclick="closePopup()">시작하기</button>
+  </div>
+</div>
 <p>
 <button onclick="generateBoard()">다시 생성</button>
 
@@ -95,6 +144,10 @@ function shuffle(arr){
     let j=Math.floor(Math.random()*(i+1));
     [arr[i],arr[j]]=[arr[j],arr[i]];
   }
+}
+
+function closePopup(){
+  document.getElementById("rulePopup").style.display = "none";
 }
 
 // ===== 보드 생성 =====
