@@ -125,6 +125,8 @@ button {
 <p>
 <button onclick="generateBoard()">다시 생성</button>
 
+<button onclick="randomPaint()">랜덤 색칠</button>
+  
 <script>
 const rows = 18;
 const cols = 12;
@@ -345,6 +347,67 @@ function drawBoard(){
     cell.dataset.idx=i;
     cell.onclick=clickCell;
     boardEl.appendChild(cell);
+  }
+}
+
+  function randomPaint(){
+
+  // 아직 안 칠해진 칸들 모으기
+  let available = [];
+
+  for(let i=0;i<board.length;i++){
+    if(!colored.has(i)){
+      available.push(i);
+    }
+  }
+
+  // 숫자별로 묶기
+  let map = {};
+
+  available.forEach(i=>{
+    let num = board[i];
+    if(!map[num]) map[num] = [];
+    map[num].push(i);
+  });
+
+  // 쌍이 있는 숫자만 추리기
+  let candidates = Object.keys(map).filter(n => map[n].length >= 2);
+
+  if(candidates.length === 0){
+    alert("더 이상 칠할 수 있는 쌍이 없습니다!");
+    return;
+  }
+
+  // 랜덤 숫자 선택
+  let randNum = candidates[Math.floor(Math.random() * candidates.length)];
+
+  let arr = map[randNum];
+
+  // 그 숫자 중 2개 랜덤 선택
+  shuffle(arr);
+  let i1 = arr[0];
+  let i2 = arr[1];
+
+  let c1El=document.querySelector(`[data-idx="${i1}"]`);
+  let c2El=document.querySelector(`[data-idx="${i2}"]`);
+
+  let lightness = 60 + Math.random()*15;
+  let color = `hsl(${baseHue}, 35%, ${lightness}%)`;
+
+  c1El.style.background=color;
+  c2El.style.background=color;
+  c1El.style.color="white";
+  c2El.style.color="white";
+
+  c1El.classList.add("filled");
+  c2El.classList.add("filled");
+
+  colored.add(i1);
+  colored.add(i2);
+
+  // 클리어 체크
+  if(colored.size===rows*cols){
+    setTimeout(()=>alert("🎉 클리어!"),50);
   }
 }
 
